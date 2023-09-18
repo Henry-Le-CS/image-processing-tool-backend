@@ -1,0 +1,1 @@
+export { FILE_TYPE_QUERY } from "./query"

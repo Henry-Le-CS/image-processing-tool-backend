@@ -1,0 +1,1 @@
+export { IEditedFileData } from "./file"
