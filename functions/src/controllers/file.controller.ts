@@ -64,34 +64,29 @@ export const renameFiles = async (req: Request<{}, {}, {
     const fileRenamingPromises = data.map(async (file) => {
         const { fileId, fileName, trafficCondition } = file;
         const { density, condition, velocity } = trafficCondition
-        try {
-            const copiedFiles = await drive.files.copy({
-                fileId: fileId,
-            })
+        const copiedFiles = await drive.files.copy({
+            fileId: fileId,
+        })
 
-            if (!(copiedFiles && copiedFiles?.data?.id)) return;
+        if (!(copiedFiles && copiedFiles?.data?.id)) return;
 
-            // Copy the file to the destination folder with new name
-            await drive.files.update({
-                fileId: copiedFiles.data.id,
-                addParents: destinationFolder,
-                removeParents: sourceFolder,
-                requestBody: {
-                    name: fileName + `_${density}_${condition}_${velocity}`
-                }
-            })
+        // Copy the file to the destination folder with new name
+        await drive.files.update({
+            fileId: copiedFiles.data.id,
+            addParents: destinationFolder,
+            removeParents: sourceFolder,
+            requestBody: {
+                name: fileName + `_${density}_${condition}_${velocity}`
+            }
+        })
 
-            // Update the original file name to indicate that it has been edited
-            await drive.files.update({
-                fileId: fileId,
-                requestBody: {
-                    name: fileName + '_edited'
-                }
-            })
-        }
-        catch (err) {
-            console.log(err);
-        }
+        // Update the original file name to indicate that it has been edited
+        await drive.files.update({
+            fileId: fileId,
+            requestBody: {
+                name: "edited_" + fileName
+            }
+        })
     })
 
     const promiseResult = (await Promise.allSettled(fileRenamingPromises));
@@ -102,11 +97,11 @@ export const renameFiles = async (req: Request<{}, {}, {
     }
 
     const failedReasons = unsucessfulPromises.map((promise) => {
-        if(promise?.status == "rejected") {
+        if (promise?.status == "rejected") {
             return promise.reason;
         }
         return "";
-    }); 
+    });
 
     return res.status(400).send(`Some files have not been renamed successfully, the reasons are: ${failedReasons}`);
 }

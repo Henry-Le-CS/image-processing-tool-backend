@@ -4,7 +4,7 @@ import { FILE_TYPE_QUERY } from "../constants"
 export const retrieveFilesInDriveFolder = async (folderId: string, pageSize = 20,  nextPageToken?: string, fileType: "image" | "other" = "image") => {
     const fileResponseData = await drive.files.list({
         corpora: "allDrives",
-        q: `'${folderId}' in parents and not name contains '_edited' ` + FILE_TYPE_QUERY[fileType],
+        q: `'${folderId}' in parents and not name contains 'edited_' ` + FILE_TYPE_QUERY[fileType],
         includeItemsFromAllDrives: true,
         supportsAllDrives: true,
         pageToken: nextPageToken, // Search for content on the next page
