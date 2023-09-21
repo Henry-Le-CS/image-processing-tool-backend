@@ -69,7 +69,7 @@ export const renameFiles = async (req: Request<{}, {}, {
             fileId: fileId
         })
 
-        if (!(fileInfo && fileInfo?.data?.name?.includes('edited_'))) return;
+        if ((fileInfo && fileInfo?.data?.name?.includes('edited_'))) return;
 
         const copiedFiles = await drive.files.copy({
             fileId: fileId,
