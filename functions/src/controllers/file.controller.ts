@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { fileHasValidImageExtension, retrieveFilesInDriveFolder } from "../utils";
 import { IEditedFileData } from "./interfaces";
 import { drive } from "../config/drive";
+import { getNewFileNames } from "../utils/file";
 
 export const retrieveFiles = async (
     req: Request<
@@ -63,20 +64,20 @@ export const renameFiles = async (req: Request<{}, {}, {
 
     const fileRenamingPromises = data.map(async (file) => {
         const { fileId, fileName, trafficCondition } = file;
-        const { density, condition, velocity } = trafficCondition
         const copiedFiles = await drive.files.copy({
             fileId: fileId,
         })
 
         if (!(copiedFiles && copiedFiles?.data?.id)) return;
-
+        
+        const newFileName = getNewFileNames(fileName, trafficCondition);
         // Copy the file to the destination folder with new name
         await drive.files.update({
             fileId: copiedFiles.data.id,
             addParents: destinationFolder,
             removeParents: sourceFolder,
             requestBody: {
-                name: fileName + `_${density}_${condition}_${velocity}`
+                name: newFileName
             }
         })
 
