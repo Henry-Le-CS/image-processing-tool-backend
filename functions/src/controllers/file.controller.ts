@@ -64,6 +64,13 @@ export const renameFiles = async (req: Request<{}, {}, {
 
     const fileRenamingPromises = data.map(async (file) => {
         const { fileId, fileName, trafficCondition } = file;
+
+        const fileInfo = await drive.files.get({
+            fileId: fileId
+        })
+
+        if (!(fileInfo && fileInfo?.data?.name?.includes('edited_'))) return;
+
         const copiedFiles = await drive.files.copy({
             fileId: fileId,
         })
