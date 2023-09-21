@@ -31,8 +31,13 @@ export const getNewFileNames = (fileName: string, trafficCondition: {
         return fileName;
     }
 
-    const [originalName, extension] = fileName.split(".");
-    const newFileName = `${originalName}_${condition}_${density}_${velocity}.${extension}`;
+    const extensionIndex = fileName.lastIndexOf('.');
+    if(extensionIndex === -1) return fileName;
+
+    const extension = fileName.slice(extensionIndex); // This will also include the dot
+    const originalName = fileName.slice(0, extensionIndex);
+
+    const newFileName = `${originalName}_${condition}_${density}_${velocity}${extension}`;
 
     return newFileName;
 }
