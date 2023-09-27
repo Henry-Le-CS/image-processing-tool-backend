@@ -27,12 +27,12 @@ export const getNewFileNames = (fileName: string, trafficCondition: {
 }) => {
     const { condition, density, velocity } = trafficCondition;
 
-    if (!(condition && density && velocity)) {
+    if (!(typeof condition != "undefined" && typeof density != "undefined" && typeof velocity != "undefined")) {
         return fileName;
     }
 
     const extensionIndex = fileName.lastIndexOf('.');
-    if(extensionIndex === -1) return fileName;
+    if (extensionIndex === -1) return fileName;
 
     const extension = fileName.slice(extensionIndex); // This will also include the dot
     const originalName = fileName.slice(0, extensionIndex);

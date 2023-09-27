@@ -76,8 +76,10 @@ export const renameFiles = async (req: Request<{}, {}, {
         })
 
         if (!(copiedFiles && copiedFiles?.data?.id)) return;
-        
+
         const newFileName = getNewFileNames(fileName, trafficCondition);
+
+        if (newFileName == fileName) return; // There is no need to rename the file
         // Copy the file to the destination folder with new name
         await drive.files.update({
             fileId: copiedFiles.data.id,
