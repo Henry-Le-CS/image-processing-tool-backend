@@ -20,13 +20,12 @@ export const retrieveFiles = async (
   >,
   res: Response
 ) => {
-  const { folderId, pageSize = 20, nextPageToken } = req.query;
-  const maxPageSize = 500;
+  const { folderId, pageSize = 500, nextPageToken } = req.query;
 
   try {
     const fileResponseData = await retrieveFilesInDriveFolder(
       folderId,
-      maxPageSize,
+      pageSize,
       nextPageToken
     );
 
@@ -37,7 +36,7 @@ export const retrieveFiles = async (
         .send(`Cannot find any files in the folder with Id: ${folderId}`);
     }
 
-    const filesData = files.slice(0, pageSize).reduce(
+    const filesData = files.reduce(
       (accumulator, currentFile) => {
         const { id, name } = currentFile;
 
