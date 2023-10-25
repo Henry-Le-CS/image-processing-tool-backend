@@ -10,12 +10,12 @@
 // import { onRequest } from "firebase-functions/v2/https";
 // import * as functions from "firebase-functions"
 // import * as logger from "firebase-functions/logger";
-import  * as express from "express"
+import * as express from "express"
 import * as functions from "firebase-functions"
 import * as cors from "cors"
 import * as bodyParser from "body-parser"
 import * as dotenv from "dotenv"
-import { fileRouter } from "./routes";
+import { cameraRouter, fileRouter } from "./routes";
 
 dotenv.config();
 
@@ -29,5 +29,6 @@ app.get('/', (req: any, res: any) => {
 });
 
 app.use('/api', fileRouter)
+app.use('/api', cameraRouter)
 
 exports.app = functions.https.onRequest(app);
