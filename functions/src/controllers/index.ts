@@ -1,2 +1,2 @@
 export { renameFiles, retrieveFiles } from "./file.controller"
-export { searchCamera } from "./camera.controller"
+export { searchCameraByAddress, searchCameraById, listCamera, searchCameraInRadius } from "./camera.controller"
